@@ -46,9 +46,13 @@ Struktur mengikuti **PlatformIO** standar:
 
 .
 ├─ src/ # kode utama (main.cpp)
+
 ├─ include/ # header (opsional)
+
 ├─ lib/ # library privat (opsional)
+
 ├─ test/ # unit/integration test (opsional)
+
 └─ platformio.ini # konfigurasi PlatformIO (board, lib, monitor baud, dll)
 
 ---
