@@ -44,7 +44,6 @@
 ## Struktur Proyek
 Struktur mengikuti **PlatformIO** standar:
 
-.
 ├─ src/ # kode utama (main.cpp)
 
 ├─ include/ # header (opsional)
