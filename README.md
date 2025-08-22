@@ -1,20 +1,20 @@
 # ESP32DoitDevkitV1-BLE9100
 
-> Eksperimen **ESP32 DOIT DevKit V1** sebagai jembatan (**bridge**) **Bluetooth Low Energy (BLE)** ⇄ **UART** ke modul **SIMCom BLE9100**. Fokusnya: mengirim perintah/teks dari perangkat BLE (mis. ponsel) ke modul SIMCom via UART dan meneruskan balik responsnya ke BLE.
+> Eksperimen **ESP32 DOIT DevKit V1** sebagai jembatan (**bridge**) **Bluetooth Low Energy (BLE)** ⇄ **UART** ke modul **Sensor DO BLE9100**. Fokusnya: membaca data sensor dari perangkat BLE Sensor DO via UART dan meneruskan ke Serial Monitor.
 
 ---
 
 ## Ringkas
 - **Tujuan**: Proof-of-concept / eksperimen.
 - **Board**: ESP32 DOIT DevKit V1 (Arduino framework).
-- **Peran**: BLE peripheral (server) di ESP32 + bridge ke UART (Serial2) ke modul SIMCom BLE9100.
-- **Kegunaan**: Kirim **AT command** atau data ke modul SIMCom lewat BLE (tanpa kabel serial ke PC).
+- **Peran**: BLE peripheral (server) di ESP32 + bridge ke UART (Serial2) ke Sensor DO BLE9100.
+- **Kegunaan**: Membaca data dari Sensor DO lewat BLE (tanpa kabel serial ke PC).
 
 ---
 
 ## Fitur
 - **BLE Peripheral (Server)** pada ESP32: menyiarkan (advertise) nama perangkat & karakteristik (characteristic) untuk **Write**/**Notify**.
-- **Bridge UART⇄BLE**: data dari BLE → diteruskan ke **UART** (modul SIMCom). Respons dari UART → dikirim kembali via **Notify** ke BLE.
+- **Bridge UART⇄BLE**: data dari BLE → diteruskan ke **UART** (Sensor DO). Respons dari UART → dikirim kembali ke Serial Monitor.
 - **Serial Debug** (USB) @ `115200` untuk log & troubleshooting.
 
 > Catatan: Proyek ini eksperimen sederhana. Untuk produksi, tambahkan framing, flow control, retry, buffering, dan proteksi overrun.
@@ -25,9 +25,9 @@
 
 ### Komponen
 - 1× **ESP32 DOIT DevKit V1**
-- 1× **SIMCom BLE9100** (atau modul SIMCom seri BLE yang setara)
+- 1× **DO SENSOR BLE9100** (atau Sensor seri BLE yang setara)
 - Kabel USB (ESP32 ↔ PC) dan beberapa jumper
-- (Opsional) Catu daya terpisah untuk modul SIMCom jika butuh arus lebih besar
+- (Opsional) Catu daya terpisah untuk Sensor DO jika butuh arus lebih besar
 
 ### Koneksi Dasar (disarankan)
 | ESP32 (DOIT) | SIMCom BLE9100 | Keterangan                         |
@@ -74,12 +74,13 @@ Cari/atur konstanta berikut (nama bisa berbeda tergantung implementasi):
 
 Contoh pola inisialisasi UART & BLE (cuplikan umum):
 ```cpp
-// UART ke modul SIMCom
+// UART ke modul Sensor DO
 HardwareSerial SerialAT(2);
 SerialAT.begin(UART_BAUD, SERIAL_8N1, UART_RX_PIN, UART_TX_PIN);
 
 // BLE peripheral + 2 characteristic (Write untuk kirim ke UART, Notify untuk balasan)
 Sesuaikan UUID dan nama perangkat agar mudah dikenali di aplikasi BLE.
+
 
 ## Cara Bangun & Flash
 Opsi A — PlatformIO (VS Code)
@@ -103,12 +104,12 @@ Opsi B — Arduino IDE
 2. Buka aplikasi nRF Connect / LightBlue di ponsel.
 3. Scan & connect ke perangkat dengan DEVICE_NAME yang diset.
 4. Temukan service/characteristic:
-  Write: kirim teks (mis. AT\r\n) → diteruskan ke UART modul SIMCom.
-  Notify: aktifkan notifikasi → lihat balasan (OK) dari modul SIMCom.
+  Write: kirim teks → diteruskan ke UART Sensor DO.
+  Notify: aktifkan notifikasi → lihat balasan (OK) dari Sensor DO. (tidak digunakan di sensor ble9100)
 
 5. Bila tidak respon:
   Cek wiring TX/RX (harus silang).
-  Pastikan modul SIMCom menyala dan baud rate match.
+  Pastikan Sensor DO menyala dan baud rate match.
   Pantau log di Serial untuk error.
 
 
