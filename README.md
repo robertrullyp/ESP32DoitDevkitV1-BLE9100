@@ -80,7 +80,7 @@ SerialAT.begin(UART_BAUD, SERIAL_8N1, UART_RX_PIN, UART_TX_PIN);
 
 // BLE peripheral + 2 characteristic (Write untuk kirim ke UART, Notify untuk balasan)
 Sesuaikan UUID dan nama perangkat agar mudah dikenali di aplikasi BLE.
-
+```
 
 ## Cara Bangun & Flash
 Opsi A — PlatformIO (VS Code)
